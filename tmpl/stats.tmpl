@@ -1,0 +1,9 @@
+#? stdtmpl | standard
+#proc genStats(username: string, raw: bool): string =
+# result = ""
+# var count = versionCount("data/logs/" & username & ".cgl")
+<div class="stats">
+    <h2>Stats</h2>
+    releases: $count
+</div>
+#end proc

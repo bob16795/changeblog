@@ -1,0 +1,108 @@
+#? stdtmpl | standard
+#proc genUser(username: string, canpost: bool, raw = false): string =
+# result = ""
+# var title = "no such user"
+# if fileExists("data/logs/" & username & ".cgl"):
+# var html = readLog("data/logs/" & username & ".cgl")
+# if canpost:
+# result &= genPostForm(username)
+# end if
+# result &= genStats(username, false)
+# if not raw:
+# html = markdown(html)
+# end if
+# title = username
+$html
+# else:
+# result &= genStats(username, false)
+# end if
+#end proc
+#? stdtmpl | standard
+#
+#proc genLogin(c: var TData, errorMsg = ""): string =
+# result = ""
+# if not c.loggedIn:
+<div id="login" class="stats">
+    <form name="login" action="/dologin" method="POST" class="box">
+        <h3 style="line-height: 1.9rem;">Login</h3>
+
+        # if errorMsg.len() != 0:
+        <div class="notification is-danger" style="text-align: center;font-size: 1.2rem; line-height: 1.8rem;">
+            <b>${errorMsg}</b>
+        </div>
+        # end if
+
+        <div class="field form-group">
+            <label class="label">Email</label>
+            <div class="control has-icons-left has-icons-right">
+                <input type="email" class="form-control input is-rounded" name="email" placeholder="Email" minlength="5"
+                    dir="auto" required autofocus>
+            </div>
+        </div>
+        <div class="field form-group">
+            <label class="label">Password</label>
+            <div class="control has-icons-left has-icons-right">
+                <input type="password" class="form-control input is-rounded" name="password"
+                    autocomplete="current-password" minlength="4" placeholder="Password" dir="auto" required>
+            </div>
+        </div>
+
+        <input href="#" type="submit"
+            class="btn btn-custom btn-blue-secondary button is-primary is-fullwidth is-rounded" value="Login" />
+
+    </form>
+</div>
+# else:
+<h1>You are already logged in!</h1>
+# end if
+#end proc
+#proc genRegister(c: var TData, errorMsg = ""): string =
+# result = ""
+# if not c.loggedIn:
+<div id="login" class="stats">
+    <form name="login" action="/dosignup" method="POST" class="box">
+        <h3 style="line-height: 1.9rem;">Login</h3>
+
+        # if errorMsg.len() != 0:
+        <div class="notification is-danger" style="text-align: center;font-size: 1.2rem; line-height: 1.8rem;">
+            <b>${errorMsg}</b>
+        </div>
+        # end if
+        <div class="field form-group">
+            <label class="label">Email</label>
+            <div class="control has-icons-left has-icons-right">
+                <input type="email" class="form-control input is-rounded" name="email" placeholder="Email" minlength="5"
+                    dir="auto" required autofocus>
+            </div>
+        </div>
+        <div class="field form-group">
+            <label class="label">Username</label>
+            <div class="control has-icons-left has-icons-right">
+                <input type="username" class="form-control input is-rounded" name="username" placeholder="Username"
+                    minlength="1" dir="auto" required autofocus>
+            </div>
+        </div>
+        <div class="field form-group">
+            <label class="label">Password</label>
+            <div class="control has-icons-left has-icons-right">
+                <input type="password" class="form-control input is-rounded" name="password"
+                    autocomplete="current-password" minlength="4" placeholder="Password" dir="auto" required>
+            </div>
+        </div>
+        <div class="field form-group">
+            <label class="label">Confirm Password</label>
+            <div class="control has-icons-left has-icons-right">
+                <input type="password" class="form-control input is-rounded" name="passwordconf"
+                    autocomplete="current-password" minlength="4" placeholder="Password" dir="auto" required>
+            </div>
+        </div>
+
+        <input href="#" type="submit"
+            class="btn btn-custom btn-blue-secondary button is-primary is-fullwidth is-rounded" value="Login" />
+
+    </form>
+</div>
+# else:
+<h1>You are already logged in!</h1>
+# end if
+#end proc

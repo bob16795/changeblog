@@ -1,0 +1,12 @@
+#? stdtmpl | standard
+#
+#proc genIndex(db: DbConn): string =
+# result = ""
+# var users = getTotalUserCount(db)
+# var versions = getTotalVersionCount(db)
+<div class="stats">
+    <h2>Global stats</h2>
+    <p class="stat">users: $users</p>
+    <p class="stat">versions: $versions</p>
+</div>
+#end proc

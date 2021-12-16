@@ -1,0 +1,20 @@
+#? stdtmpl | standard
+#proc genSearch(db: DbConn, query: string): string =
+# result = ""
+# let results = getSearchResults(db, query)
+# if results.len > 0:
+# for entry in results:
+<div class="entry">
+    <h2>
+      <a href="$entry.url">$entry.title</a>
+    </h2>
+    <p class="stat">$entry.desc</p>
+</div>
+#end for
+#else:
+<div class="msg">
+    <h1>Error</h1>
+    <p class="stat">No results found</p>
+</div>
+#end if
+#end proc

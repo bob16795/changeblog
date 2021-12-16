@@ -1,0 +1,29 @@
+#? stdtmpl | standard
+#proc genPostForm(username: string): string =
+# result = ""
+<div id="post" class="topform">
+    <details>
+      <summary>
+        New
+      </summary>
+      <form name="post" action="/post?username=$username" method="POST" class="box">
+
+          <div class="field form-group">
+              <label class="label">Heading</label>
+              <div class="control has-icons-left has-icons-right">
+                  <input type="text" class="form-control input is-rounded" name="heading" placeholder="Heading" dir="auto" required autofocus>
+              </div>
+          </div>
+          <div class="field form-group">
+              <label class="label">Message</label>
+              <div class="control has-icons-left has-icons-right">
+                  <input type="text" class="form-control input is-rounded" name="change" placeholder="Change" dir="auto" required>
+              </div>
+          </div>
+
+          <input href="#" type="submit"
+              class="btn btn-custom btn-blue-secondary button is-primary is-fullwidth is-rounded" value="Post" />
+      </form>
+    </details>
+</div>
+#end proc

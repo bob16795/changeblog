@@ -1,6 +1,7 @@
 import tables
 import strutils
 import strformat
+import os
 
 proc readLog*(filename: string): string =
   var tmpVersion = "latest"
@@ -47,6 +48,7 @@ proc createPost*(username: string, message, heading: string) =
   writeFile(filename, contents)
 
 proc versionCount*(filename: string): int =
+  if not fileExists(filename): return 0
   result = 0
   for line in readFile(filename).split('\n'):
     var linedata = line.split("|")

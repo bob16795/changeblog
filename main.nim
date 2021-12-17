@@ -278,15 +278,6 @@ routes:
       resp wrap(@"msg", c, toLowerAscii(@"name"), genUser(toLowerAscii(@"name"),
           c.username == @"name"))
 
-  # get "/u/@name/avatar.svg":
-  #   var q = request.params()
-  #   var size = @"size"
-  #   createTFD()
-  #   var client = newHttpClient()
-  #   resp(Http200, [("Content-Type", "image/svg+xml")], client.getContent(
-  #       "https://avatars.dicebear.com/api/adventurer-neutral/" & @"name" &
-  #       ".svg?scale=50"))
-
   get "/confirm":
     var key = @"key"
     var lines = readLines("data/keys.csv")
@@ -310,9 +301,8 @@ routes:
     createTFD()
     resp Http404, wrap(@"msg", c, "", genError("404 Error",
         "The page you requested could not be found"))
-  #[
+
   error Exception:
     createTFD()
     resp Http500, wrap(@"msg", c, "", genError("500 Error",
         "The page you requested could not be displayed"))
-  ]#

@@ -209,11 +209,11 @@ include "tmpl/wrap.tmpl"
 routes:
   get "/":
     createTFD()
-    resp wrap(@"msg", c, "Changeblog", genIndex(db))
+    resp wrap(mainWebsite, @"msg", c, "Changeblog", genIndex(db))
 
   get "/signup":
     createTFD()
-    resp wrap(@"msg", c, "Sign-Up", genRegister(c, @"msg"))
+    resp wrap(mainWebsite, @"msg", c, "Sign-Up", genRegister(c, @"msg"))
 
   post "/dosignup":
     createTFD()
@@ -232,7 +232,7 @@ routes:
 
   get "/login":
     createTFD()
-    resp wrap(@"msg", c, "Login", genLogin(c, @"msg"))
+    resp wrap(mainWebsite, @"msg", c, "Login", genLogin(c, @"msg"))
 
   post "/dologin":
     createTFD()
@@ -273,10 +273,10 @@ routes:
       redirect("/users")
     else:
       if (not userExists(db, @"name")):
-        resp Http404, wrap(@"msg", c, "", genError("404 Error",
+        resp Http404, wrap(mainWebsite, @"msg", c, "", genError("404 Error",
           "The page you requested could not be found"))
-      resp wrap(@"msg", c, toLowerAscii(@"name"), genUser(toLowerAscii(@"name"),
-          c.username == @"name"))
+      resp wrap(mainWebsite, @"msg", c, toLowerAscii(@"name"), genUser(
+          toLowerAscii(@"name"), c.username == @"name"))
 
   get "/confirm":
     var key = @"key"
@@ -295,14 +295,14 @@ routes:
 
   get "/search":
     createTFD()
-    resp wrap(@"msg", c, "search", genSearch(db, @"query"))
+    resp wrap(mainWebsite, @"msg", c, "search", genSearch(db, @"query"))
 
   error Http404:
     createTFD()
-    resp Http404, wrap(@"msg", c, "", genError("404 Error",
+    resp Http404, wrap(mainWebsite, @"msg", c, "", genError("404 Error",
         "The page you requested could not be found"))
 
   error Exception:
     createTFD()
-    resp Http500, wrap(@"msg", c, "", genError("500 Error",
+    resp Http500, wrap(mainWebsite, @"msg", c, "", genError("500 Error",
         "The page you requested could not be displayed"))

@@ -98,3 +98,11 @@ p.stat {
   background-color: #111;
   color: #fff;
 }
+
+h2 > .link {
+    visibility: hidden;
+}
+
+h2:hover > .link {
+    visibility: visible;
+}

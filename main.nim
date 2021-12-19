@@ -297,6 +297,9 @@ routes:
     createTFD()
     resp wrap(mainWebsite, @"msg", c, "search", genSearch(db, @"query"))
 
+  get "/u/@name/post/@post":
+    createTFD()
+
   error Http404:
     createTFD()
     resp Http404, wrap(mainWebsite, @"msg", c, "", genError("404 Error",

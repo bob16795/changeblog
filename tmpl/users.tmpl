@@ -1,18 +1,37 @@
 #? stdtmpl | standard
+#proc genPost(post: tuple[name: string, posts: Table[string, seq[string]]], url: string, raw = false): string =
+# result = ""
+# var title = post.name
+# var posts = post.posts
+<div class="entry">
+  <h2>$title
+  <a href="$url" class="link">
+    <i class="bi bi-box-arrow-up-right"></i>
+  </a>
+  </h2>
+# for heading, contents in posts:
+  <h3>$heading</h3>
+  <ul>
+# for item in contents:
+    <li>$item</li>
+# end for
+  </ul>
+# end for
+</div>
+#end proc
 #proc genUser(username: string, canpost: bool, raw = false): string =
 # result = ""
 # var title = "no such user"
 # if fileExists("data/logs/" & username & ".cgl"):
-# var html = readLog("data/logs/" & username & ".cgl")
+# var posts = readLog("data/logs/" & username & ".cgl")
 # if canpost:
 # result &= genPostForm(username)
 # end if
 # result &= genStats(username, false)
-# if not raw:
-# html = markdown(html)
-# end if
 # title = username
-$html
+# for post in posts:
+# result &= genPost(post, "/", false)
+# end for
 # else:
 # result &= genStats(username, false)
 # end if

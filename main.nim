@@ -14,6 +14,7 @@ import code/previews # Our file with password utils
 import code/types
 from std/httpclient import newHttpClient, getContent
 import markdown
+import strformat
 
 # First we'll load config files
 let dict = loadConfig("config/config.cfg")
@@ -297,8 +298,9 @@ routes:
     createTFD()
     resp wrap(mainWebsite, @"msg", c, "search", genSearch(db, @"query"))
 
-  get "/u/@name/post/@post":
+  get "/u/@name/@post":
     createTFD()
+    resp wrap(mainWebsite, @"msg", c, @"post", genUserPost(@"name", @"post"))
 
   error Http404:
     createTFD()

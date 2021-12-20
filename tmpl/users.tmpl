@@ -30,10 +30,31 @@
 # result &= genStats(username, false)
 # title = username
 # for post in posts:
-# result &= genPost(post, "/", false)
+# result &= genPost(post, &"/u/{username}/{post.name}", false)
 # end for
 # else:
 # result &= genStats(username, false)
+# end if
+#end proc
+#proc genUserPost(username, postname: string): string =
+# result = ""
+# var title = "no such user"
+# if fileExists("data/logs/" & username & ".cgl"):
+#  var posts = readLog("data/logs/" & username & ".cgl")
+#  var post: tuple[name: string, posts: Table[string, seq[string]]]
+#  for tmppost in posts:
+#   if tmppost.name == postname:
+#    post = tmppost
+#    break
+#   end if
+#  end for
+#  if post.name != "":
+#   result &= genPost(post, &"/u/{username}/{post.name}", false)
+#  else:
+<div class="error">
+
+</div>
+#  end if
 # end if
 #end proc
 #? stdtmpl | standard

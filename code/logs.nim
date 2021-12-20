@@ -3,10 +3,11 @@ import strutils
 import strformat
 import os
 
-proc readLog*(filename: string): seq[tuple[name: string, posts: Table[string,
-    seq[string]]]] =
+proc readLog*(filename: string): seq[tuple[name: string,
+    posts: Table[string, seq[string]]]] =
   result = @[]
   var name = "latest"
+  var id = 0
   var posts: Table[string, seq[string]]
   for line in readFile(filename).split('\n'):
     var linedata = line.split("|")
@@ -16,15 +17,6 @@ proc readLog*(filename: string): seq[tuple[name: string, posts: Table[string,
         posts[linedata[0]] = @[]
       posts[linedata[0]] &= linedata[1]
     elif posts.len != 0:
-      # result &= "<div class=\"entry\">\n"
-      # result &= "<h2>" & tmpVersion & "</h2>\n\n"
-      # for h, d in headings:
-      #   if headings[h] != @[]:
-      #     result &= "### " & h & "\n"
-      #     for data in headings[h]:
-      #       result &= "\n- " & data
-      #     result &= "\n\n"
-      # result &= "</div>\n"
       result &= (name: name, posts: posts)
       posts.clear()
       name = line
@@ -34,15 +26,6 @@ proc readLog*(filename: string): seq[tuple[name: string, posts: Table[string,
       name = line
       if line[0] == '\\':
         name = line[1..^1]
-  # result &= "<div class=\"entry\">\n"
-  # result &= "<h2>" & tmpVersion & "</h2>\n\n"
-  # for h, d in headings:
-  #   if headings[h] != @[]:
-  #     result &= "### " & h & "\n"
-  #     for data in headings[h]:
-  #       result &= "\n- " & data
-  #     result &= "\n\n"
-  # result &= "</div>"
   result &= (name: name, posts: posts)
 
 proc createPost*(username: string, message, heading: string) =

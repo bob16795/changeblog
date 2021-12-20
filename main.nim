@@ -210,7 +210,7 @@ include "tmpl/wrap.tmpl"
 routes:
   get "/":
     createTFD()
-    resp wrap(mainWebsite, @"msg", c, "Changeblog", genIndex(db))
+    resp wrap(mainWebsite, @"msg", c, "", genIndex(db))
 
   get "/signup":
     createTFD()
@@ -300,6 +300,9 @@ routes:
 
   get "/u/@name/@post":
     createTFD()
+    if (not userExists(db, @"name")):
+      resp Http404, wrap(mainWebsite, @"msg", c, "", genError("404 Error",
+        "The page you requested could not be found"))
     resp wrap(mainWebsite, @"msg", c, @"post", genUserPost(@"name", @"post"))
 
   error Http404:

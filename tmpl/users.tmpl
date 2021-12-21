@@ -13,7 +13,12 @@
   <h3>$heading</h3>
   <ul>
 # for item in contents:
-    <li>$item</li>
+    <li>
+      $item
+      <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-secondary"><i class="bi bi-trash"></i></button>
+      </div>
+    </li>
 # end for
   </ul>
 # end for

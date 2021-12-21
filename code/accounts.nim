@@ -1,12 +1,16 @@
 import smtp
+import strformat
 
-proc createAccount(email, username: string, pass, passconf: string) =
-    discard
-    # var msg = createMessage("verify your changeblog account",
-    #                         "Hello!.\n Is this awesome or what?",
-    #                         @["prestosilver.ptp@gmail.com"])
-    # let smtpConn = newSmtp(useSsl = true, debug = true)
-    # smtpConn.connect("smtp.gmail.com", Port 465)
-    # smtpConn.auth("prestosilver.ptp@gmail.com", "hellow65")
-    # smtpConn.sendmail("prestosilver.ptp@gmail.com", @[
-    #         "prestosilver.ptp@gmail.com"], $msg)
+proc sendVerify*(email, username: string, key: string) =
+    var msg = createMessage("verify your changeblog account",
+                            &"http://changeblog.prestosilver.info/confirm?user={username}&key={key}",
+                            @[email])
+    let smtpConn = newSmtp(useSsl = false, debug = true)
+    smtpConn.connect("smtppro.zoho.com", Port 587)
+    smtpConn.startTls()
+    smtpConn.auth("prestosilver@prestosilver.info", "!Hellow16795")
+    smtpConn.sendmail("prestosilver@prestosilver.info", @[
+            email], $msg)
+
+when isMainModule:
+    sendVerify("prestosilver.ptp@gmail.com", "lol", "lmao")

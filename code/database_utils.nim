@@ -2,6 +2,7 @@ import db_sqlite, os, parsecfg, strutils, logging
 import logs
 import ../code/password_utils
 import strformat
+import accounts
 
 proc generateDB*() =
   echo "Generating database"
@@ -116,6 +117,8 @@ proc createNormalUser*(db: DbConn, iName, iEmail, iPwd: string,
   let f = open("data/keys.csv", fmAppend)
   f.write(iName, "|", confirm, "\n")
   f.close()
+
+  sendVerify(iEmail, iName, confirm)
 
   # Insert user into database
   if insertID(db, sql"INSERT INTO person (name, email, password, salt, status) VALUES (?, ?, ?, ?, ?)",

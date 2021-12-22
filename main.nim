@@ -15,6 +15,9 @@ import code/types
 from std/httpclient import newHttpClient, getContent
 import markdown
 import strformat
+import schedules #except newSettings
+import asyncdispatch
+import times
 
 # First we'll load config files
 let dict = loadConfig("config/config.cfg")
@@ -29,16 +32,13 @@ let db_host = dict.getSectionValue("Database", "host")
 
 let mainURL = dict.getSectionValue("Server", "url")
 let mainPort = parseInt dict.getSectionValue("Server", "port")
-let mainWebsite = dict.getSectionValue("Server", "website")
+var mainWebsite{.threadvar.}: string
+mainWebsite = dict.getSectionValue("Server", "website")
+let settings = newSettings(port = Port(mainPort), bindAddr = mainURL)
 
 # Database var
 var db: DbConn
 
-
-# Jester setting server settings
-settings:
-  port = Port(mainPort)
-  bindAddr = mainURL
 
 proc init(c: var TData) =
   ## Empty out user session data
@@ -207,7 +207,11 @@ include "tmpl/index.tmpl"
 include "tmpl/users.tmpl"
 include "tmpl/wrap.tmpl"
 
-routes:
+scheduler mySched:
+  every(seconds = 1, id = "sync tick"):
+    echo("sync tick, seconds=1 ", now())
+
+router mainRouter:
   get "/":
     createTFD()
     resp wrap(mainWebsite, @"msg", c, "", genIndex(db))
@@ -314,3 +318,16 @@ routes:
     createTFD()
     resp Http500, wrap(mainWebsite, @"msg", c, "", genError("500 Error",
         "The page you requested could not be displayed"))
+
+
+proc main() =
+  asyncCheck mySched.start()
+
+  # start jester
+  var server = initJester(mainRouter, settings = settings)
+
+  # run
+  server.serve()
+
+when isMainModule:
+  main()

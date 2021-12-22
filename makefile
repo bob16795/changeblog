@@ -3,7 +3,7 @@ TMPLSOURCES := $(shell find $(SOURCEDIR) -name '*.tmpl')
 HTMLSOURCES := $(shell find $(SOURCEDIR) -name '*.html')
 
 main: $(NIMSOURCES) $(TMPLSOURCES) $(HTMLSOURCES)
-	nim -d:ssl c main.nim
+	nim -d:ssl --threads:on c main.nim
 run: main
 	./main
 clean:

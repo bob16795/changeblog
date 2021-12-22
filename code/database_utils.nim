@@ -3,6 +3,7 @@ import logs
 import ../code/password_utils
 import strformat
 import accounts
+import times
 
 proc generateDB*() =
   echo "Generating database"
@@ -115,7 +116,9 @@ proc createNormalUser*(db: DbConn, iName, iEmail, iPwd: string,
   let password = makePassword(iPwd, salt)
   let confirm = makeConfirm()
   let f = open("data/keys.csv", fmAppend)
-  f.write(iName, "|", confirm, "\n")
+  let staleTime = (now() + 24.hours).toTime().toUnix()
+
+  f.write(iName, "|", confirm, "|", staleTime, "\n")
   f.close()
 
   sendVerify(iEmail, iName, confirm)

@@ -218,7 +218,7 @@ scheduler mySched:
       else:
         deleteUser(db, row.split("|")[0])
         echo "deleted stale user '" & row.split("|")[0] & "'"
-    writeFile("data/kets.csv", newconf)
+    writeFile("data/keys.csv", newconf)
 
 router mainRouter:
   get "/":

@@ -18,6 +18,7 @@ import strformat
 import schedules #except newSettings
 import asyncdispatch
 import times
+import json
 
 # First we'll load config files
 let dict = loadConfig("config/config.cfg")
@@ -208,8 +209,16 @@ include "tmpl/users.tmpl"
 include "tmpl/wrap.tmpl"
 
 scheduler mySched:
-  every(seconds = 1, id = "sync tick"):
-    echo("sync tick, seconds=1 ", now())
+  every(hours = 1, id = "cleanup", async = true):
+    echo("check stale accounts")
+    var newconf = ""
+    for row in readLines("data/keys.csv"):
+      if row.split("|")[2].parseInt() > now().toTime().toUnix():
+        newconf &= row & "\n"
+      else:
+        deleteUser(db, row.split("|")[0])
+        echo "deleted stale user '" & row.split("|")[0] & "'"
+    writeFile("data/kets.csv", newconf)
 
 router mainRouter:
   get "/":
@@ -309,6 +318,14 @@ router mainRouter:
         "The page you requested could not be found"))
     resp wrap(mainWebsite, @"msg", c, @"post", genUserPost(@"name", @"post"))
 
+  get "/api/1":
+    var j = %*{}
+    resp Http200, $j, "application/json"
+
+  get "/api/1/search":
+    var j = %* getSearchResults(db, @"query")
+    resp Http200, $j, "application/json"
+
   error Http404:
     createTFD()
     resp Http404, wrap(mainWebsite, @"msg", c, "", genError("404 Error",
@@ -318,7 +335,6 @@ router mainRouter:
     createTFD()
     resp Http500, wrap(mainWebsite, @"msg", c, "", genError("500 Error",
         "The page you requested could not be displayed"))
-
 
 proc main() =
   asyncCheck mySched.start()

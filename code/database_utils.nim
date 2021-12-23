@@ -159,17 +159,27 @@ proc userExists*(db: DbConn, iName: string): bool =
 
   return false
 
-proc getSearchResults*(db: DbConn, query: string): seq[tuple[url: string,
-    title: string, desc: string]] =
-  result = @[]
+type
+  Results* = object
+    items*: seq[ResultItem]
+  ResultItem* = object
+    url*: string
+    title*: string
+    desc*: string
+
+proc getSearchResults*(db: DbConn, query: string): Results =
+  result.items = @[]
   const userQuery = sql"SELECT name FROM person WHERE name LIKE ?"
 
   for row in fastRows(db, userQuery, &"%{query}%"):
     let
       count = versionCount("data/logs/" & row[0] & ".cgl")
       desc = &"releases: {count}"
-      entry: tuple[url: string,
-    title: string, desc: string] = (url: &"/u/{row[0]}",
+      entry = ResultItem(url: &"/u/{row[0]}",
         title: &"user - {row[0]}", desc: desc)
-    result &= entry
+    result.items &= entry
   return result
+
+proc deleteUser*(db: DbConn, user: string) =
+  db.exec(sql"DELETE FROM person WHERE name = ?", user)
+

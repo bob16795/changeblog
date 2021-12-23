@@ -2,8 +2,8 @@
 #proc genSearch(db: DbConn, query: string): string =
 # result = ""
 # let results = getSearchResults(db, query)
-# if results.len > 0:
-# for entry in results:
+# if results.items.len > 0:
+# for entry in results.items:
 <div class="entry">
     <h2>
       <a href="$entry.url">$entry.title</a>
